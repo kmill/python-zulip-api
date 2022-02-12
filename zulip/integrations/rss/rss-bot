@@ -172,7 +172,8 @@ def send_zulip(entry: Any, feed_name: str) -> Dict[str, Any]:
 
     body = strip_tags(body)
 
-    if m := re.match("Recent Commits to (\w+):", feed_name):
+    m = re.match(r"Recent Commits to (\w+):", feed_name)
+    if m:
         repo = m.group(1)  # type: str
         body = re.sub(r"\((#\d+)\)", lambda m: "(" + repo + m.group(1) + ")", body, 1)
 
