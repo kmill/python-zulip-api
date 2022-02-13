@@ -197,7 +197,7 @@ def send_zulip(entry, feed_name):
     else:
         content = "**[%s](%s)**\n%s\n%s" % (entry.title,
                                             entry.link,
-                                            strip_tags(body),
+                                            body,
                                             entry.link)  # type: str
 
     if opts.math:
