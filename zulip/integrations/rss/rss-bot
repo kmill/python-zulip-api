@@ -175,13 +175,15 @@ def send_zulip(entry: Any, feed_name: str) -> Dict[str, Any]:
     m = re.match(r"Recent Commits to (\w+):", feed_name)
     if m:
         repo = m.group(1)  # type: str
-        body = re.sub(r"\((#\d+)\)", lambda m: "(" + repo + m.group(1) + ")", body, 1)
+        body = re.sub(r"^(.*?) \((#\d+)\)", lambda m:
+                      "**[{}]({})** ({}{})".format(m.group(1), entry.link, repo, m.group(2)),
+                      body, 1)
 
         author_detail = entry.author  # type: str
         if 'author_detail' in entry and 'href' in entry.author_detail:
             author_detail = "[{}]({})".format(author_detail, entry.author_detail.href)
 
-        content = "- {}\n\nAuthored-by: {}\n[Commit]({})".format(
+        content = "{}\n\nAuthored-by: {} [(commit)]({})".format(
             body,
             author_detail,
             entry.link,
