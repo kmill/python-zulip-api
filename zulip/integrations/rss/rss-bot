@@ -182,9 +182,22 @@ def send_zulip(entry, feed_name):
     m = re.match(r"Recent Commits to (\w+):", feed_name)
     if m:
         repo = m.group(1)  # type: str
-        body = re.sub(r"^(.*?) \((#\d+)\)", lambda m:
-                      "**[{}]({})** ({}{})".format(m.group(1), entry.link, repo, m.group(2)),
-                      body, 1)
+        lines = body.splitlines()
+        if lines:
+            m = re.match(r"^(.*?) \((#\d+)\)(.*)$", lines[0])
+        if m:
+            body = "**[{}]({})** ({}{}){}\n".format(
+                m.group(1),
+                entry.link,
+                repo,
+                m.group(2),
+                m.group(3)
+            ) + "\n".join(lines[1:])
+        elif lines:
+            body = "**[{}]({})**\n".format(
+                lines[0],
+                entry.link
+            ) + "\n".join(lines[1:])
 
         author_detail = entry.author  # type: str
         if 'author_detail' in entry and 'href' in entry.author_detail:
