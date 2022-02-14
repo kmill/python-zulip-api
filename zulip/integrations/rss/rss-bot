@@ -188,7 +188,7 @@ def send_zulip(entry, feed_name):
         if 'author_detail' in entry and 'href' in entry.author_detail:
             author_detail = "[{}]({})".format(author_detail, entry.author_detail.href)
 
-        content = "{}\n\nAuthored-by: {}\n[Commit]({})".format(
+        content = "- {}\n\nAuthored-by: {}\n[Commit]({})".format(
             body,
             author_detail,
             entry.link,
